@@ -324,10 +324,16 @@
             padding: 20px;
             z-index: 100;
             pointer-events: none; /* Permite que los eventos pasen a través cuando está oculto */
+            opacity: 0.7; /* Semi-transparente por defecto */
+            transition: opacity 0.3s ease;
         }
 
         #mobile-controls.active {
             pointer-events: auto; /* Captura eventos cuando está activo */
+        }
+
+        #mobile-controls:active {
+            opacity: 0.9; /* Más opaco cuando se está usando */
         }
 
         #virtual-joystick {
@@ -457,6 +463,9 @@
             margin: 10px;
             transition: all 0.3s;
             cursor: pointer;
+            /* Mejoras para dispositivos táctiles */
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .ship-option:hover {
@@ -545,6 +554,40 @@
             margin-top: 20px;
         }
 
+        /* Instrucciones y controles */
+        .instructions {
+            width: 80%;
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: rgba(0, 20, 40, 0.7);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 2rem;
+            line-height: 1.6;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .controls-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: rgba(0, 40, 80, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        .controls-section h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            padding-bottom: 8px;
+        }
+
         /* Responsividad */
         @media (max-width: 768px) {
             h1 {
@@ -555,6 +598,7 @@
             }
             .instructions {
                 width: 90%;
+                flex-direction: column;
             }
             .ship-selection-container {
                 flex-direction: column;
@@ -575,6 +619,38 @@
             }
             .ship-option {
                 width: 90%;
+            }
+
+            /* Ajustes para controles móviles en pantallas pequeñas */
+            #virtual-joystick {
+                width: 120px;
+                height: 120px;
+                margin-left: 10px;
+            }
+
+            #joystick-thumb {
+                width: 50px;
+                height: 50px;
+            }
+
+            #action-buttons button {
+                width: 70px;
+                height: 70px;
+                font-size: 0.9rem;
+            }
+
+            #action-buttons {
+                margin-right: 10px;
+                gap: 10px;
+            }
+
+            /* Ajustes para la pantalla de controles */
+            .controls-section {
+                padding: 10px;
+            }
+
+            .controls-section h3 {
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -738,10 +814,21 @@
         <div id="controls-screen" class="screen hidden">
             <h2>Controls</h2>
             <div class="instructions">
-                <p><strong>Movement:</strong> Arrow keys or WASD</p>
-                <p><strong>Fire:</strong> Space</p>
-                <p><strong>Special Weapon:</strong> Z</p>
-                <p><strong>Pause:</strong> P or ESC</p>
+                <div class="controls-section">
+                    <h3>Desktop Controls</h3>
+                    <p><strong>Movement:</strong> Arrow keys or WASD</p>
+                    <p><strong>Fire:</strong> Space</p>
+                    <p><strong>Special Weapon:</strong> Z</p>
+                    <p><strong>Pause:</strong> P or ESC</p>
+                </div>
+
+                <div class="controls-section">
+                    <h3>Mobile Controls</h3>
+                    <p><strong>Movement:</strong> Virtual joystick (left side)</p>
+                    <p><strong>Fire:</strong> Fire button (right side)</p>
+                    <p><strong>Special Weapon:</strong> Bomb button (right side)</p>
+                    <p><strong>Pause:</strong> Pause button (right side)</p>
+                </div>
             </div>
             <button id="back-controls-button">Back</button>
         </div>

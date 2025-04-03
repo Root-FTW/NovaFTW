@@ -89,6 +89,12 @@ export class Player {
             special: false
         };
 
+        // Analog control values for smooth movement with touch/gamepad
+        this.analogControls = {
+            x: 0, // -1 to 1 (left to right)
+            y: 0  // -1 to 1 (down to up)
+        };
+
         this.createMesh();
     }
 
@@ -574,20 +580,28 @@ export class Player {
         this.velocity.y = 0; // Not used in 2D top-down movement
         this.velocity.z = 0;
 
-        if (this.controls.left) this.velocity.x = -1;
-        if (this.controls.right) this.velocity.x = 1;
-        if (this.controls.up) this.velocity.z = -1; // Up means forward (negative z)
-        if (this.controls.down) this.velocity.z = 1; // Down means backward (positive z)
+        // Comprobar si hay entrada analógica (controles táctiles/gamepad)
+        if (Math.abs(this.analogControls.x) > 0.01 || Math.abs(this.analogControls.y) > 0.01) {
+            // Usar controles analógicos para movimiento suave
+            this.velocity.x = this.analogControls.x;
+            this.velocity.z = -this.analogControls.y; // Invertir Y para que hacia arriba sea negativo Z
+        } else {
+            // Usar controles digitales (teclado)
+            if (this.controls.left) this.velocity.x = -1;
+            if (this.controls.right) this.velocity.x = 1;
+            if (this.controls.up) this.velocity.z = -1; // Up means forward (negative z)
+            if (this.controls.down) this.velocity.z = 1; // Down means backward (positive z)
 
-        // Ignore forward/backward controls as we're using up/down for z-axis movement
-        // if (this.controls.forward) this.velocity.z = -1;
-        // if (this.controls.backward) this.velocity.z = 1;
+            // Ignore forward/backward controls as we're using up/down for z-axis movement
+            // if (this.controls.forward) this.velocity.z = -1;
+            // if (this.controls.backward) this.velocity.z = 1;
 
-        // Normalize velocity for diagonal movement
-        const length = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.z * this.velocity.z);
-        if (length > 0) {
-            this.velocity.x /= length;
-            this.velocity.z /= length;
+            // Normalize velocity for diagonal movement with digital controls
+            const length = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.z * this.velocity.z);
+            if (length > 0) {
+                this.velocity.x /= length;
+                this.velocity.z /= length;
+            }
         }
 
         // Update position based on velocity
@@ -1051,6 +1065,17 @@ export class Player {
         console.log('Player boundaries set:', boundaries);
     }
 
+    /**
+     * Establece los controles analógicos para movimiento suave
+     * @param {number} x - Valor horizontal (-1 a 1, izquierda a derecha)
+     * @param {number} y - Valor vertical (-1 a 1, abajo a arriba)
+     */
+    setAnalogControls(x, y) {
+        // Limitar valores entre -1 y 1
+        this.analogControls.x = Math.max(-1, Math.min(1, x));
+        this.analogControls.y = Math.max(-1, Math.min(1, y));
+    }
+
     handleInput(event) {
         const keyDown = event.type === 'keydown';
 
@@ -1088,6 +1113,12 @@ export class Player {
                     this.controls.special = false;
                 }
                 break;
+        }
+
+        // Resetear controles analógicos cuando se usan teclas
+        if (keyDown) {
+            this.analogControls.x = 0;
+            this.analogControls.y = 0;
         }
     }
 }
