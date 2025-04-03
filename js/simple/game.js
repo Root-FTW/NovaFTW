@@ -58,10 +58,10 @@ export class Game {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x000020); // Dark blue background
 
-        // Create camera - more top-down view like classic shoot 'em ups
-        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.camera.position.set(0, 20, 15); // Higher up and positioned to see the player area
-        this.camera.lookAt(0, 0, 5); // Looking at the player's starting position
+        // Create camera - true top-down view like classic shoot 'em ups
+        this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera.position.set(0, 30, 0); // Posicionada directamente arriba para vista cenital
+        this.camera.lookAt(0, 0, 0); // Mirando al centro del área de juego
 
         // Create renderer
         this.renderer = new THREE.WebGLRenderer({
@@ -640,12 +640,12 @@ export class Game {
         // Use fixed values that match the visible screen area
         // These values are based on the camera position and field of view
 
-        // Fixed boundaries that work well with our camera setup
+        // Límites fijos que funcionan bien con nuestra configuración de cámara cenital
         const boundaries = {
-            minX: -14,  // Left edge of screen
-            maxX: 14,   // Right edge of screen
-            minZ: -8,   // Top edge of screen (remember Z is depth) - extended to allow more movement
-            maxZ: 18    // Bottom edge of screen - extended to allow more movement
+            minX: -12,  // Borde izquierdo de la pantalla
+            maxX: 12,   // Borde derecho de la pantalla
+            minZ: -10,  // Borde superior de la pantalla (recuerda que Z es profundidad)
+            maxZ: 10    // Borde inferior de la pantalla
         };
 
         // Store boundaries for use in player movement

@@ -626,10 +626,14 @@ export class Player {
         if (this.mesh) {
             this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 
-            // Add slight tilt based on movement
-            this.mesh.rotation.z = -this.velocity.x * 0.2;
-            // Keep the ship pointing forward with slight adjustments based on movement
-            this.mesh.rotation.x = Math.PI / 2; // Rotate to face up from top-down view
+            // Para vista cenital, la nave debe apuntar hacia arriba (negativo Z)
+            this.mesh.rotation.x = Math.PI / 2; // Rotación base para vista cenital
+
+            // Añadir ligera inclinación basada en el movimiento para dar sensación de maniobra
+            this.mesh.rotation.z = -this.velocity.x * 0.15;
+
+            // Ligera inclinación hacia adelante/atrás basada en el movimiento en Z
+            this.mesh.rotation.y = this.velocity.z * 0.05;
         }
 
         // Handle firing
@@ -994,7 +998,7 @@ export class Player {
 
         if (this.mesh) {
             this.mesh.position.set(this.position.x, this.position.y, this.position.z);
-            this.mesh.rotation.set(Math.PI, 0, 0);
+            this.mesh.rotation.set(Math.PI / 2, 0, 0); // Rotación correcta para vista cenital
             this.mesh.visible = true;
         }
     }
