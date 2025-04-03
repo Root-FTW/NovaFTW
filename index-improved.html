@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>NovaFTW</title>
     <style>
         /* Estilos generales */
@@ -310,6 +311,97 @@
             box-shadow: 0 0 10px #ffff00;
         }
 
+        /* Controles móviles */
+        #mobile-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            z-index: 100;
+            pointer-events: none; /* Permite que los eventos pasen a través cuando está oculto */
+        }
+
+        #mobile-controls.active {
+            pointer-events: auto; /* Captura eventos cuando está activo */
+        }
+
+        #virtual-joystick {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-left: 20px;
+        }
+
+        #joystick-base {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 255, 255, 0.7);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        #joystick-thumb {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.8);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+
+        #action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-right: 20px;
+        }
+
+        #action-buttons button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            cursor: pointer;
+        }
+
+        #fire-button {
+            background: linear-gradient(to bottom, #ff3300, #cc0000);
+            border: 2px solid #ff6600;
+        }
+
+        #bomb-button {
+            background: linear-gradient(to bottom, #ffcc00, #ff9900);
+            border: 2px solid #ffcc33;
+        }
+
+        #pause-button {
+            background: linear-gradient(to bottom, #3399ff, #0066cc);
+            border: 2px solid #66ccff;
+        }
+
+        /* Ocultar controles móviles en pantallas grandes */
+        @media (min-width: 769px) {
+            #mobile-controls {
+                display: none;
+            }
+        }
+
         /* Animaciones */
         @keyframes pulse {
             0% { opacity: 0.7; }
@@ -517,6 +609,22 @@
             <div id="power-ups">
                 <span id="shield-indicator" class="power-up-indicator" title="Shield"></span>
                 <span id="speed-indicator" class="power-up-indicator" title="Speed Boost"></span>
+            </div>
+        </div>
+
+        <!-- Controles táctiles para dispositivos móviles -->
+        <div id="mobile-controls" class="hidden">
+            <!-- Joystick virtual para movimiento -->
+            <div id="virtual-joystick">
+                <div id="joystick-base"></div>
+                <div id="joystick-thumb"></div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div id="action-buttons">
+                <button id="fire-button">FIRE</button>
+                <button id="bomb-button">BOMB</button>
+                <button id="pause-button">PAUSE</button>
             </div>
         </div>
 

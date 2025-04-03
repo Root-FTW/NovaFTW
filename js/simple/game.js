@@ -4,6 +4,7 @@ import { ProjectileManager } from './projectiles.js';
 import { PowerUpManager } from './powerups.js';
 import { ParallaxBackground } from './background.js';
 import { UIManager } from './ui-manager.js';
+import { MobileControls } from './mobile-controls.js';
 
 export class Game {
     constructor() {
@@ -18,6 +19,7 @@ export class Game {
         this.powerUpManager = null;
         this.background = null;
         this.uiManager = null;
+        this.mobileControls = null;
 
         this.isGameRunning = false;
         this.isPaused = false;
@@ -88,6 +90,9 @@ export class Game {
         this.background = new ParallaxBackground(this.scene);
         this.uiManager = new UIManager(this);
 
+        // Initialize mobile controls
+        this.mobileControls = new MobileControls(this);
+
         // Calculate screen boundaries
         this.calculateScreenBoundaries();
     }
@@ -120,6 +125,11 @@ export class Game {
         this.enemyManager.reset();
         this.projectileManager.reset();
         this.powerUpManager.reset();
+
+        // Reset mobile controls if available
+        if (this.mobileControls) {
+            this.mobileControls.reset();
+        }
 
         // Cargar nivel
         this.enemyManager.setLevel(this.currentLevel);
@@ -154,6 +164,11 @@ export class Game {
         this.projectileManager.update(delta);
         this.powerUpManager.update(delta);
         this.background.update(delta);
+
+        // Update mobile controls if available
+        if (this.mobileControls) {
+            this.mobileControls.update();
+        }
 
         // Check collisions
         this.checkCollisions();
