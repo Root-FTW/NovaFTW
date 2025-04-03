@@ -21,6 +21,9 @@ export class UIManager {
             weaponValue: document.getElementById('weapon-value'),
             bombsValue: document.getElementById('bombs-value'),
             healthValue: document.getElementById('health-value'),
+            healthFill: document.getElementById('health-fill'),
+            shieldValue: document.getElementById('shield-value'),
+            shieldFill: document.getElementById('shield-fill'),
             finalScore: document.getElementById('final-score'),
             finalLevel: document.getElementById('final-level'),
             finalTime: document.getElementById('final-time'),
@@ -200,6 +203,10 @@ export class UIManager {
 
         // Inicializar valores de opciones
         this.updateOptionsUI();
+
+        // Inicializar barras de salud y escudo
+        this.updateHealth(3, 3); // Valores predeterminados
+        this.updateShieldBar(0); // Escudo inactivo por defecto
     }
 
     showScreen(screenName) {
@@ -500,11 +507,37 @@ export class UIManager {
     }
 
     updateShieldIndicator(active) {
+        // Actualizar indicador de escudo
         if (this.elements.shieldIndicator) {
             if (active) {
                 this.elements.shieldIndicator.classList.add('power-up-active');
+
+                // Actualizar barra de escudo al 100% cuando está activo
+                this.updateShieldBar(100);
             } else {
                 this.elements.shieldIndicator.classList.remove('power-up-active');
+
+                // Actualizar barra de escudo al 0% cuando está inactivo
+                this.updateShieldBar(0);
+            }
+        }
+    }
+
+    updateShieldBar(percentage) {
+        // Actualizar texto de escudo
+        if (this.elements.shieldValue) {
+            this.elements.shieldValue.textContent = `${Math.round(percentage)}%`;
+        }
+
+        // Actualizar barra de escudo
+        if (this.elements.shieldFill) {
+            this.elements.shieldFill.style.width = `${percentage}%`;
+
+            // Efecto de pulso cuando el escudo está activo
+            if (percentage > 0) {
+                this.elements.shieldFill.style.animation = 'pulse 2s infinite';
+            } else {
+                this.elements.shieldFill.style.animation = 'none';
             }
         }
     }
@@ -520,8 +553,24 @@ export class UIManager {
     }
 
     updateHealth(health, maxHealth) {
+        // Actualizar texto de salud
         if (this.elements.healthValue) {
             this.elements.healthValue.textContent = `${health}/${maxHealth}`;
+        }
+
+        // Actualizar barra de salud
+        if (this.elements.healthFill) {
+            const healthPercentage = (health / maxHealth) * 100;
+            this.elements.healthFill.style.width = `${healthPercentage}%`;
+
+            // Cambiar color según nivel de salud
+            if (healthPercentage <= 25) {
+                this.elements.healthFill.style.background = 'linear-gradient(to right, #ff0000, #ff3300)';
+            } else if (healthPercentage <= 50) {
+                this.elements.healthFill.style.background = 'linear-gradient(to right, #ff3300, #ff9900)';
+            } else {
+                this.elements.healthFill.style.background = 'linear-gradient(to right, #ff9900, #ffcc00)';
+            }
         }
     }
 

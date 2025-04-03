@@ -227,13 +227,54 @@
             padding: 15px;
         }
 
-        #score, #lives, #level, #weapon, #bombs {
+        #score, #lives, #level, #weapon, #bombs, #health-container, #shield-container {
             margin-bottom: 10px;
         }
 
-        #score-value, #lives-value, #level-value, #weapon-value, #bombs-value {
+        #score-value, #lives-value, #level-value, #weapon-value, #bombs-value, .stat-value {
             color: #00ffff;
             font-weight: bold;
+        }
+
+        /* Estilos para las barras de estadísticas */
+        #health-container, #shield-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-label {
+            width: 60px;
+            margin-right: 10px;
+        }
+
+        .stat-bar {
+            flex-grow: 1;
+            height: 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-right: 10px;
+            max-width: 200px;
+        }
+
+        .stat-fill {
+            height: 100%;
+            width: 100%; /* Se ajustará con JavaScript */
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .health-bar .stat-fill {
+            background: linear-gradient(to right, #ff3300, #ff9900);
+        }
+
+        .shield-bar .stat-fill {
+            background: linear-gradient(to right, #0066ff, #00ffff);
+        }
+
+        .stat-value {
+            width: 40px;
+            text-align: right;
         }
 
         /* Power-up indicator styles */
@@ -267,6 +308,20 @@
         #speed-indicator.power-up-active {
             background-color: #ffff00;
             box-shadow: 0 0 10px #ffff00;
+        }
+
+        /* Animaciones */
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
         /* Pantalla de pausa */
@@ -437,7 +492,25 @@
         <div id="ui-overlay">
             <div id="score">Score: <span id="score-value">0</span></div>
             <div id="lives">Lives: <span id="lives-value">3</span></div>
-            <div id="health">Health: <span id="health-value">3/3</span></div>
+
+            <!-- Barra de salud -->
+            <div id="health-container">
+                <div class="stat-label">Health:</div>
+                <div class="stat-bar health-bar">
+                    <div id="health-fill" class="stat-fill"></div>
+                </div>
+                <div id="health-value" class="stat-value">3/3</div>
+            </div>
+
+            <!-- Barra de escudo -->
+            <div id="shield-container">
+                <div class="stat-label">Shield:</div>
+                <div class="stat-bar shield-bar">
+                    <div id="shield-fill" class="stat-fill"></div>
+                </div>
+                <div id="shield-value" class="stat-value">0%</div>
+            </div>
+
             <div id="level">Level: <span id="level-value">1</span></div>
             <div id="weapon">Weapon: <span id="weapon-value">Lv.1</span></div>
             <div id="bombs">Bombs: <span id="bombs-value">0</span></div>
