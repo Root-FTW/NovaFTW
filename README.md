@@ -1,6 +1,6 @@
 # NovaFTW
 
-Un juego de disparos espacial estilo shoot 'em up inspirado en los clásicos de los 90s como Star Soldier: Vanishing Earth. Desarrollado con HTML, CSS, JavaScript y Three.js.
+Un juego de disparos espacial estilo shoot 'em up inspirado en los clásicos de los 90s. Desarrollado con HTML, CSS, JavaScript y Three.js.
 
 ## Características
 
