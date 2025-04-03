@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Soldier: Vanishing Earth Replica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #game-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #ff0;
+            text-shadow: 0 0 10px #ff0;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff0;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 1rem 0;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .instructions {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        #ui-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 5;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px #000;
+        }
+
+        #score, #lives, #level {
+            margin-bottom: 10px;
+        }
+
+        #score-value, #lives-value, #level-value {
+            color: #ff0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="ui-overlay">
+            <div id="score">Score: <span id="score-value">0</span></div>
+            <div id="lives">Lives: <span id="lives-value">3</span></div>
+            <div id="level">Level: <span id="level-value">1</span></div>
+        </div>
+        <div id="start-screen" class="screen">
+            <h1>Star Soldier: Vanishing Earth</h1>
+            <button id="start-button">Start Game</button>
+            <div class="instructions">
+                <h2>Controls:</h2>
+                <p>Arrow keys or WASD to move</p>
+                <p>Space to shoot</p>
+                <p>Z to use special weapon</p>
+            </div>
+        </div>
+        <div id="game-over-screen" class="screen hidden">
+            <h1>Game Over</h1>
+            <div id="final-score">Score: 0</div>
+            <button id="restart-button">Play Again</button>
+        </div>
+        <canvas id="game-canvas"></canvas>
+    </div>
+
+    <!-- Three.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+
+    <!-- Game scripts -->
+    <script src="js/main-simple.js"></script>
+</body>
+</html>

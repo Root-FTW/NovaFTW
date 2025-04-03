@@ -1,0 +1,31 @@
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de entorno de desarrollo
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de dependencias y módulos
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Archivos de construcción y distribución
+dist/
+build/
+*.min.js
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+*.bak
+
+# Archivos específicos del proyecto que no queremos incluir
+# (añade aquí cualquier archivo específico que quieras excluir)

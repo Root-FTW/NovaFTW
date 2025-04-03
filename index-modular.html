@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Soldier: Vanishing Earth Replica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #game-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #ff0;
+            text-shadow: 0 0 10px #ff0;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff0;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 1rem 0;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .instructions {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        #ui-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 5;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px #000;
+        }
+
+        #score, #lives, #level, #weapon, #bombs {
+            margin-bottom: 10px;
+        }
+
+        #score-value, #lives-value, #level-value, #weapon-value, #bombs-value {
+            color: #ff0;
+            font-weight: bold;
+        }
+
+        /* Power-up indicator styles */
+        .power-up-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 50%;
+            background-color: #333;
+            border: 2px solid #666;
+        }
+
+        .power-up-active {
+            box-shadow: 0 0 10px #fff;
+        }
+
+        #shield-indicator {
+            border-color: #00ff00;
+        }
+
+        #shield-indicator.power-up-active {
+            background-color: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        #speed-indicator {
+            border-color: #ffff00;
+        }
+
+        #speed-indicator.power-up-active {
+            background-color: #ffff00;
+            box-shadow: 0 0 10px #ffff00;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="ui-overlay">
+            <div id="score">Score: <span id="score-value">0</span></div>
+            <div id="lives">Lives: <span id="lives-value">3</span></div>
+            <div id="level">Level: <span id="level-value">1</span></div>
+            <div id="weapon">Weapon: <span id="weapon-value">Lv.1</span></div>
+            <div id="bombs">Bombs: <span id="bombs-value">0</span></div>
+            <div id="power-ups">
+                <span id="shield-indicator" class="power-up-indicator" title="Shield"></span>
+                <span id="speed-indicator" class="power-up-indicator" title="Speed Boost"></span>
+            </div>
+        </div>
+        <div id="start-screen" class="screen">
+            <div class="logo-container">
+                <h1>Star Soldier</h1>
+                <h2>Vanishing Earth</h2>
+            </div>
+
+            <div class="menu-container">
+                <button id="start-button">Start Game</button>
+                <button id="high-scores-button">High Scores</button>
+                <button id="options-button">Options</button>
+                <button id="controls-button">Controls</button>
+            </div>
+
+            <div class="version">REPLICA v1.0</div>
+        </div>
+
+        <div id="controls-screen" class="screen hidden">
+            <h2>Controls</h2>
+            <div class="instructions">
+                <p><strong>Movement:</strong> Arrow keys or WASD</p>
+                <p><strong>Fire:</strong> Space</p>
+                <p><strong>Special Weapon:</strong> Z</p>
+                <p><strong>Pause:</strong> P or ESC</p>
+            </div>
+            <button id="back-controls-button">Back</button>
+        </div>
+
+        <div id="options-screen" class="screen hidden">
+            <h2>Options</h2>
+            <div class="instructions">
+                <div class="option-row">
+                    <label for="sfx-volume">SFX Volume:</label>
+                    <input type="range" id="sfx-volume" min="0" max="100" value="80">
+                    <span id="sfx-value">80%</span>
+                </div>
+
+                <div class="option-row">
+                    <label for="music-volume">Music Volume:</label>
+                    <input type="range" id="music-volume" min="0" max="100" value="60">
+                    <span id="music-value">60%</span>
+                </div>
+
+                <div class="option-row">
+                    <label for="difficulty">Difficulty:</label>
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+            </div>
+            <div class="menu-container">
+                <button id="apply-options-button">Apply</button>
+                <button id="back-options-button">Back</button>
+            </div>
+        </div>
+
+        <div id="high-scores-screen" class="screen hidden">
+            <h2>High Scores</h2>
+            <div class="instructions">
+                <table id="high-scores-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Score</th>
+                            <th>Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>AAA</td>
+                            <td>10000</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>BBB</td>
+                            <td>8000</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>CCC</td>
+                            <td>6000</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>DDD</td>
+                            <td>4000</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>EEE</td>
+                            <td>2000</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button id="back-scores-button">Back</button>
+        </div>
+        <div id="game-over-screen" class="screen hidden">
+            <h1>Game Over</h1>
+            <div id="final-score">Score: 0</div>
+            <button id="restart-button">Play Again</button>
+        </div>
+        <canvas id="game-canvas"></canvas>
+    </div>
+
+    <!-- Three.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+
+    <!-- Game scripts -->
+    <script type="module">
+        import { Game } from './js/simple/game.js';
+
+        // Start the game when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const game = new Game();
+        });
+    </script>
+</body>
+</html>

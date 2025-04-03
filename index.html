@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Soldier: Vanishing Earth Replica</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- HUD mejorado -->
+        <div id="hud-container">
+            <!-- Panel superior -->
+            <div id="top-hud" class="hud-panel">
+                <div id="score-container">
+                    <div class="hud-label">SCORE</div>
+                    <div id="score-value" class="hud-value">0</div>
+                </div>
+
+                <div id="level-container">
+                    <div class="hud-label">LEVEL</div>
+                    <div id="level-value" class="hud-value">1</div>
+                </div>
+
+                <div id="weapon-container">
+                    <div class="hud-label">WEAPON</div>
+                    <div id="weapon-level" class="hud-value">LV.1</div>
+                    <div id="weapon-energy" class="energy-bar">
+                        <div class="energy-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel izquierdo -->
+            <div id="left-hud" class="hud-panel">
+                <div id="lives-container">
+                    <div class="hud-label">LIVES</div>
+                    <div id="lives-icons">
+                        <i class="fas fa-rocket life-icon"></i>
+                        <i class="fas fa-rocket life-icon"></i>
+                        <i class="fas fa-rocket life-icon"></i>
+                    </div>
+                </div>
+
+                <div id="special-container">
+                    <div class="hud-label">SPECIAL</div>
+                    <div id="special-icons">
+                        <i class="fas fa-atom special-icon"></i>
+                        <i class="fas fa-atom special-icon"></i>
+                        <i class="fas fa-atom special-icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Minimapa/Radar -->
+            <div id="radar-container">
+                <div id="radar-screen">
+                    <div id="radar-player"></div>
+                    <!-- Los enemigos se añadirán dinámicamente -->
+                </div>
+                <div id="radar-label">RADAR</div>
+            </div>
+
+            <!-- Indicador de jefe -->
+            <div id="boss-indicator" class="hidden">
+                <div id="boss-health-container">
+                    <div id="boss-name">ENEMY BOSS</div>
+                    <div id="boss-health-bar">
+                        <div id="boss-health-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notificaciones -->
+            <div id="notification-container"></div>
+        </div>
+
+        <!-- Pantallas del juego -->
+        <div id="start-screen" class="screen">
+            <div class="logo-container">
+                <h1>STAR SOLDIER</h1>
+                <h2>VANISHING EARTH</h2>
+            </div>
+
+            <div class="menu-container">
+                <button id="start-button" class="menu-button">START GAME</button>
+                <button id="options-button" class="menu-button">OPTIONS</button>
+                <button id="controls-button" class="menu-button">CONTROLS</button>
+            </div>
+
+            <div class="version">REPLICA v1.0</div>
+        </div>
+
+        <div id="pause-screen" class="screen hidden">
+            <h2>GAME PAUSED</h2>
+            <div class="menu-container">
+                <button id="resume-button" class="menu-button">RESUME</button>
+                <button id="restart-button" class="menu-button">RESTART</button>
+                <button id="options-pause-button" class="menu-button">OPTIONS</button>
+                <button id="quit-button" class="menu-button">QUIT TO MENU</button>
+            </div>
+        </div>
+
+        <div id="options-screen" class="screen hidden">
+            <h2>OPTIONS</h2>
+            <div class="options-container">
+                <div class="option-row">
+                    <label for="sfx-volume">SFX Volume:</label>
+                    <input type="range" id="sfx-volume" min="0" max="100" value="80">
+                    <span id="sfx-value">80%</span>
+                </div>
+
+                <div class="option-row">
+                    <label for="music-volume">Music Volume:</label>
+                    <input type="range" id="music-volume" min="0" max="100" value="60">
+                    <span id="music-value">60%</span>
+                </div>
+
+                <div class="option-row">
+                    <label for="graphics-quality">Graphics Quality:</label>
+                    <select id="graphics-quality">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+
+                <div class="option-row">
+                    <label for="control-type">Control Type:</label>
+                    <select id="control-type">
+                        <option value="keyboard" selected>Keyboard</option>
+                        <option value="gamepad">Gamepad</option>
+                        <option value="touch">Touch (Mobile)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="menu-container">
+                <button id="apply-options-button" class="menu-button">APPLY</button>
+                <button id="back-options-button" class="menu-button">BACK</button>
+            </div>
+        </div>
+
+        <div id="controls-screen" class="screen hidden">
+            <h2>CONTROLS</h2>
+            <div class="controls-container">
+                <div class="control-section">
+                    <h3>Keyboard</h3>
+                    <div class="control-row"><span>Move:</span><span>Arrow Keys or WASD</span></div>
+                    <div class="control-row"><span>Fire:</span><span>Space</span></div>
+                    <div class="control-row"><span>Special Weapon:</span><span>Z</span></div>
+                    <div class="control-row"><span>Pause:</span><span>ESC or P</span></div>
+                </div>
+
+                <div class="control-section">
+                    <h3>Gamepad</h3>
+                    <div class="control-row"><span>Move:</span><span>Left Stick or D-Pad</span></div>
+                    <div class="control-row"><span>Fire:</span><span>A Button</span></div>
+                    <div class="control-row"><span>Special Weapon:</span><span>X Button</span></div>
+                    <div class="control-row"><span>Pause:</span><span>Start Button</span></div>
+                </div>
+
+                <div class="control-section">
+                    <h3>Touch (Mobile)</h3>
+                    <div class="control-row"><span>Move:</span><span>Virtual Joystick (Left)</span></div>
+                    <div class="control-row"><span>Fire:</span><span>Fire Button (Right)</span></div>
+                    <div class="control-row"><span>Special Weapon:</span><span>Special Button (Right)</span></div>
+                    <div class="control-row"><span>Pause:</span><span>Pause Button (Top)</span></div>
+                </div>
+            </div>
+
+            <button id="back-controls-button" class="menu-button">BACK</button>
+        </div>
+
+        <div id="game-over-screen" class="screen hidden">
+            <h2 id="game-over-title">GAME OVER</h2>
+            <div id="final-stats">
+                <div id="final-score">Score: 0</div>
+                <div id="final-level">Level: 1</div>
+                <div id="final-time">Time: 00:00</div>
+            </div>
+
+            <div class="menu-container">
+                <button id="restart-game-button" class="menu-button">PLAY AGAIN</button>
+                <button id="main-menu-button" class="menu-button">MAIN MENU</button>
+            </div>
+        </div>
+
+        <!-- Cinemáticas -->
+        <div id="cinematic-screen" class="screen hidden">
+            <div id="cinematic-content"></div>
+            <div id="cinematic-text"></div>
+            <div id="cinematic-skip">Press SPACE to skip</div>
+        </div>
+
+        <!-- Controles táctiles para móviles -->
+        <div id="touch-controls" class="hidden">
+            <div id="virtual-joystick"></div>
+            <div id="action-buttons">
+                <button id="touch-fire" class="touch-button">FIRE</button>
+                <button id="touch-special" class="touch-button">SPECIAL</button>
+            </div>
+            <button id="touch-pause" class="touch-button">II</button>
+        </div>
+
+        <canvas id="game-canvas"></canvas>
+    </div>
+
+    <!-- Three.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/shaders/FilmShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/shaders/RGBShiftShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/shaders/VignetteShader.js"></script>
+
+    <!-- Game scripts -->
+    <script src="js/main.js" type="module"></script>
+</body>
+</html>
