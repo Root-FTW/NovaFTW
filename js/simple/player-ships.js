@@ -8,7 +8,7 @@ export class Player {
         this.boundaries = {
             minX: -12,
             maxX: 12,
-            minZ: 0,
+            minZ: -10, // Permitir movimiento en toda la pantalla
             maxZ: 10
         };
 
@@ -608,18 +608,22 @@ export class Player {
         this.position.x += this.velocity.x * deltaTime * this.speed;
         this.position.z += this.velocity.z * deltaTime * this.speed;
 
-        // Clamp position to screen bounds using simple boundaries
+        // SOLUCIÓN EQUILIBRADA: Aplicar límites que permitan movimiento completo pero eviten que la nave desaparezca
         if (this.boundaries) {
-            // Apply boundaries with different margins for X and Z
-            const marginX = 1.0; // Horizontal margin
-            const marginZ = 0.2; // Very small vertical margin to allow movement almost to the edges
+            // Calcular márgenes basados en el tamaño de la nave
+            // Usamos el radio de colisión como referencia para el tamaño
+            const shipRadius = this.getBoundingRadius();
+            const marginX = shipRadius * 0.5; // Margen horizontal reducido (50% del radio)
+            const marginZ = shipRadius * 0.5; // Margen vertical reducido (50% del radio)
 
+            // Aplicar límites con márgenes proporcionales al tamaño de la nave
             this.position.x = Math.max(this.boundaries.minX + marginX, Math.min(this.boundaries.maxX - marginX, this.position.x));
             this.position.z = Math.max(this.boundaries.minZ + marginZ, Math.min(this.boundaries.maxZ - marginZ, this.position.z));
         } else {
-            // Fallback to default boundaries if not set
-            this.position.x = Math.max(-12, Math.min(12, this.position.x));
-            this.position.z = Math.max(0, Math.min(10, this.position.z));
+            // Fallback a límites razonables si no están configurados
+            const shipRadius = this.getBoundingRadius();
+            this.position.x = Math.max(-20 + shipRadius, Math.min(20 - shipRadius, this.position.x));
+            this.position.z = Math.max(-20 + shipRadius, Math.min(20 - shipRadius, this.position.z));
         }
 
         // Update mesh position

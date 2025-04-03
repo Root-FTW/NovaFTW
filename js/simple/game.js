@@ -59,8 +59,8 @@ export class Game {
         this.scene.background = new THREE.Color(0x000020); // Dark blue background
 
         // Create camera - true top-down view like classic shoot 'em ups
-        this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.camera.position.set(0, 30, 0); // Posicionada directamente arriba para vista cenital
+        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera.position.set(0, 35, 0); // Posicionada más arriba para mayor ángulo de visión
         this.camera.lookAt(0, 0, 0); // Mirando al centro del área de juego
 
         // Create renderer
@@ -136,6 +136,15 @@ export class Game {
 
         // Initialize background for the first level
         this.background.createBackgroundForLevel(this.currentLevel);
+
+        // Recalcular límites de pantalla y forzar su aplicación
+        this.calculateScreenBoundaries();
+
+        // Forzar la actualización de los límites del jugador
+        if (this.player && this.screenBoundaries) {
+            this.player.setBoundaries(this.screenBoundaries);
+            console.log('Player boundaries set at game start:', this.screenBoundaries);
+        }
 
         // Start game loop
         this.isGameRunning = true;
@@ -628,34 +637,52 @@ export class Game {
 
 
     handleResize() {
+        // Actualizar cámara y renderer
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // Update screen boundaries when window is resized
+        // Actualizar límites de pantalla cuando se cambia el tamaño de la ventana
         this.calculateScreenBoundaries();
+
+        // Forzar la actualización de los límites del jugador
+        if (this.player && this.screenBoundaries) {
+            this.player.setBoundaries(this.screenBoundaries);
+            console.log('Player boundaries updated after resize:', this.screenBoundaries);
+        }
     }
 
     calculateScreenBoundaries() {
-        // Use fixed values that match the visible screen area
-        // These values are based on the camera position and field of view
+        // SOLUCIÓN EQUILIBRADA: Calcular límites basados en la vista de la cámara
+        // que permitan movimiento por toda la pantalla visible pero eviten que la nave desaparezca
 
-        // Límites fijos que funcionan bien con nuestra configuración de cámara cenital
+        // Calcular el área visible basada en la posición y campo de visión de la cámara
+        const fovRadians = this.camera.fov * (Math.PI / 180);
+        const distance = this.camera.position.y; // Altura de la cámara
+
+        // Calcular altura y ancho visibles en el plano de juego
+        const visibleHeight = 2 * Math.tan(fovRadians / 2) * distance;
+        const visibleWidth = visibleHeight * this.camera.aspect;
+
+        // Aplicar un factor de ajuste para compensar la perspectiva
+        const adjustFactor = 0.9; // 90% del área visible para maximizar el área de movimiento
+
+        // Establecer límites basados en el área visible ajustada
         const boundaries = {
-            minX: -12,  // Borde izquierdo de la pantalla
-            maxX: 12,   // Borde derecho de la pantalla
-            minZ: -10,  // Borde superior de la pantalla (recuerda que Z es profundidad)
-            maxZ: 10    // Borde inferior de la pantalla
+            minX: -visibleWidth/2 * adjustFactor,  // Límite izquierdo
+            maxX: visibleWidth/2 * adjustFactor,   // Límite derecho
+            minZ: -visibleHeight/2 * adjustFactor, // Límite superior
+            maxZ: visibleHeight/2 * adjustFactor   // Límite inferior
         };
 
-        // Store boundaries for use in player movement
+        // Almacenar límites para uso en el movimiento del jugador
         this.screenBoundaries = boundaries;
 
-        // Update player's movement boundaries
+        // Actualizar límites de movimiento del jugador
         if (this.player) {
             this.player.setBoundaries(boundaries);
         }
 
-        console.log('Screen boundaries set to fixed values:', boundaries);
+        console.log('Screen boundaries set to extreme values:', boundaries);
     }
 }

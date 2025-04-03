@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Star Soldier: Vanishing Earth Replica</title>
+    <title>NovaFTW</title>
     <style>
         * {
             margin: 0;
@@ -102,7 +102,7 @@
             <div id="level">Level: <span id="level-value">1</span></div>
         </div>
         <div id="start-screen" class="screen">
-            <h1>Star Soldier: Vanishing Earth</h1>
+            <h1>NovaFTW</h1>
             <button id="start-button">Start Game</button>
             <div class="instructions">
                 <h2>Controls:</h2>
@@ -161,9 +161,9 @@
                 this.camera.lookAt(0, 0, 0);
 
                 // Create renderer
-                this.renderer = new THREE.WebGLRenderer({ 
+                this.renderer = new THREE.WebGLRenderer({
                     canvas: document.getElementById('game-canvas'),
-                    antialias: true 
+                    antialias: true
                 });
                 this.renderer.setSize(window.innerWidth, window.innerHeight);
                 this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -209,7 +209,7 @@
                 this.score = 0;
                 this.lives = 3;
                 this.currentLevel = 1;
-                
+
                 // Update UI
                 document.getElementById('score-value').textContent = this.score;
                 document.getElementById('lives-value').textContent = this.lives;
