@@ -43,6 +43,9 @@ Este proyecto es un trabajo en progreso y se irán añadiendo nuevas caracterís
 - Sistema de puntuaciones
 - Efectos de sonido y música
 
+![diagram](https://github.com/user-attachments/assets/f68f64ea-4d4a-446f-97ce-da31e7cb8adf)
+
+
 ## Licencia
 
 Este proyecto es de código abierto y está disponible para uso personal y educativo.
